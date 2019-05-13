@@ -1,0 +1,12 @@
+RT1:
+Conf t
+!
+Int eth 1/0
+Ip add 192.168.1.1 255.255.255.0
+No shut
+!
+Router ospf 100
+router-id 1.1.1.1
+Net 192.168.1.0 0.0.0.255 area 0
+!
+End

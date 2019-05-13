@@ -1,0 +1,67 @@
+Spoke1:
+conf t
+!
+host Spoke1
+!
+cry isa po 10
+auth pre
+enc aes
+hash sha
+group 5
+!
+cry isa key NETWORK add 0.0.0.0
+!
+cry ipsec trans TRANS esp-aes esp-sha-hmac
+mode trans
+!
+cry ipsec pro PROF
+set trans TRANS
+!
+int tu 0
+ip add 172.16.1.1 255.255.255.0
+tu mode gre mu
+tu source eth 1/0
+tu pro ipsec pro PROF
+ip nhrp network 100
+ip nhrp map 172.16.1.254 10.0.0.9
+ip nhrp map multicast 10.0.0.9
+ip nhrp nhs 172.16.1.254
+!
+int eth 1/0
+ip add 10.0.0.1 255.255.255.252
+No shut
+!
+int eth 0/0
+ip add 192.168.10.1 255.255.255.0
+Ip ospf pri 200
+No shut
+!
+int eth 0/1
+ip add 192.168.11.1 255.255.255.0
+Ip ospf pri 200
+No shut
+!
+int lo 0
+ip add 192.168.19.1 255.255.255.255
+!
+router  ospf 65001
+router-id 1.1.1.1
+net 192.168.10.0 0.0.0.255 a 1
+net 192.168.11.0 0.0.0.255 a 2
+net 192.168.19.1 0.0.0.0 a 0
+Area 2 nssa no-summary
+Redistribute eigrp 100 subnet 
+default-information originate
+!
+Router eig 100
+Eigrp router-id 1.1.1.1
+Net 172.16.1.0 0.0.0.255
+Redistribute ospf 65001 metric 100000 100 255 1 1500
+!
+router bgp 65001
+Bgp router-id 1.1.1.1
+nei 10.0.0.2 remote-as 11000
+nei 10.0.0.2 password NETW0RK
+!
+!
+end

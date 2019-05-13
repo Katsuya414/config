@@ -1,0 +1,18 @@
+Switch20:
+conf t
+!
+vlan 20,21
+!
+int eth 0/0
+swi acc vlan 20
+swi mode acc
+!
+int eth 0/1 
+swi acc vlan 20
+swi mode acc
+!
+int eth 0/2
+swi acc vlan 21
+swi mode acc
+!
+end

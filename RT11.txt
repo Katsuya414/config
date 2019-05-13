@@ -1,0 +1,15 @@
+R11:
+!
+conf t
+host R11
+!
+int eth 0/0
+des SPOKE1
+ip add 192.168.11.2 255.255.255.0
+No shut
+!
+router ospf 65001
+router-id 10.10.10.10
+net 192.168.11.0 0.0.0.255 a 2
+!
+End

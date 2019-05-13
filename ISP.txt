@@ -1,0 +1,31 @@
+ISP:
+Conf t
+!
+Int eth 1/0
+Ip add 10.0.0.10 255.255.255.252
+No shut
+!
+Int eth 1/1
+Ip add 10.0.0.2 255.255.255.252
+No shut
+!
+Int eth 1/2
+Ip add 10.0.0.6 255.255.255.252
+No shut
+!
+Int lo 0
+Ip add 8.8.8.8 255.255.255.255
+!
+Router bgp 10000
+Bgp router-id 8.8.8.8
+Nei 10.0.0.9 remote-as 65000
+Nei 10.0.0.9 pass NETWORK
+Nei 10.0.0.1 remote-as 65001
+Nei 10.0.0.1 pass NETWORK
+Nei 10.0.0.5 remote-as 65002
+Nei 10.0.0.5 pass NETWORK
+Net 10.0.0.0 mask 255.255.255.252
+Net 10.0.0.4 mask 255.255.255.252
+Net 10.0.0.8 mask 255.255.255.252
+!
+End

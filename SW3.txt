@@ -1,0 +1,20 @@
+SW3:
+Conf t
+!
+Vlan 10
+Spa mode ra
+!
+int eth 0/0
+Swi acc vlan 10
+swi mode acc
+!
+Int range eth 0/2 - 3
+Swi acc vlan 10
+swi mode acc
+!
+Int range eth 1/0 - 1
+Swi acc vlan 10
+swi mode acc
+!
+End
+

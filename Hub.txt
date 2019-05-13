@@ -1,0 +1,63 @@
+Hub:
+Conf t
+!
+cry isa po 10
+auth pre
+enc aes
+hash sha
+group 5
+!
+cry isa key NETWORK add 0.0.0.0
+!
+cry ipsec trans TRANS esp-aes esp-sha-hmac
+mode trans
+!
+cry ipsec pro PROF
+set trans TRANS
+!
+Int eth 0/0
+Ip add 192.168.1.254 255.255.255.0
+Ip nat outside
+No shut
+!
+Int eth 1/0
+Ip add 10.0.0.9 255.255.255.252
+Ip nat outside
+No shut
+!
+Int tu 0
+Ip add 172.16.1.254 255.255.255.0
+Ip nat inside
+Tu mode gre mu
+Tu source eth 1/0
+Tu pro ipsec pro PROF
+Ip nhrp net 100
+Ip nhrp map multicast dynamic
+!
+Router ospf 65000
+router-id 100.100.100.100
+Network 192.168.1.0 0.0.0.255 area 0
+Redistribute eigrp 100 subnet 
+Redistribute static subnet
+Default-info ori
+!
+Router eigrp 100
+Eigrp router-id 100.100.100.100
+network 172.16.1.0 0.0.0.255
+Redistribute ospf 65000 metric 100000 100 255 1 1500
+Redistribute static
+!
+Router bgp 65000
+Bgp router-id 100.100.100.100
+Nei 10.0.0.10 remote-as 10000
+Nei 10.0.0.10 pass NETWORK
+!
+Ip route 0.0.0.0 0.0.0.0 10.0.0.10 
+!
+Ip access-list standard 10
+Permit 192.168.0.0 0.0.255.255
+!
+Ip nat inside source list 10 int eth 1/0 overload
+!
+End
+

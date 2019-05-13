@@ -1,0 +1,21 @@
+SW1:
+Conf t
+!
+vlan 10
+!
+Spa mode ra
+Spa vlan 10 pri 4096
+!
+Int range eth 0/0 - 1
+Swi acc vlan 10
+swi mode acc
+!
+Int range eth 0/2 - 3
+Swi acc vlan 10
+swi mode acc
+!
+int eth 1/0
+swi acc vlan 10
+swi mode acc
+!
+End
